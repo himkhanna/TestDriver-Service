@@ -8,11 +8,15 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
+import com.wrightexpress.authprofile.authorizationprofilemanagement.AuthorizationProfileManagement;
+import com.wrightexpress.authprofile.authorizationprofilemanagement.CWSAuthorizationProfileManagement;
 import com.wrightexpress.driver.drivermanagement.CWSDriverManagement;
 import com.wrightexpress.driver.drivermanagement.DriverManagement;
 import com.wrightexpress.driver.drivermanagement.DriverSearchRequestType;
 import com.wrightexpress.driver.drivermanagement.DriverSearchResponseType;
 import com.wrightexpress.driver.drivermanagement.WexGeneralFaultMessage;
+import com.wrightexpress.vehiclecard.vehiclecardmanagement.CWSVehicleCardManagement;
+import com.wrightexpress.vehiclecard.vehiclecardmanagement.VehicleCardManagement;
 
 public class CXFTestClient {
 
@@ -30,14 +34,20 @@ public class CXFTestClient {
         outProps.put(WSHandlerConstants.PASSWORD_TYPE, "PasswordText");
         outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS, "com.element.wex.driver.UTPasswordCallback");
         
-        CWSDriverManagement dm = new CWSDriverManagement();
-        DriverManagement port = dm.getDriverManagementSOAP();
+        CWSDriverManagement driverCWS = new CWSDriverManagement();
+        DriverManagement driverManagement = driverCWS.getDriverManagementSOAP();
+        CWSAuthorizationProfileManagement profileAuthorizationCWS=new CWSAuthorizationProfileManagement();
+        AuthorizationProfileManagement profileManagement=profileAuthorizationCWS.getAuthorizationProfileManagementSOAP();
         
-        org.apache.cxf.endpoint.Client client = ClientProxy.getClient(port);
-        client.getOutInterceptors().add(new WSS4JOutInterceptor(outProps));
+        CWSVehicleCardManagement vehicleCWS=new CWSVehicleCardManagement();
+        VehicleCardManagement vehicleManagement=vehicleCWS.getVehicleCardManagementSOAP();
+       
+        org.apache.cxf.endpoint.Client driverclient = ClientProxy.getClient(driverManagement);
+        
+        driverclient.getOutInterceptors().add(new WSS4JOutInterceptor(outProps));
         
         try {
-			DriverSearchResponseType ds = port.search(d);
+			DriverSearchResponseType ds = driverManagement.search(d);
 			System.out.println(ds.getTotalDriversFound());
 			System.out.println(ds.getDriver().size());
 		} catch (WexGeneralFaultMessage e) {
