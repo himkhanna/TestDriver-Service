@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 
 import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
@@ -42,10 +40,10 @@ public class CXFTestClient {
         DriverManagement driverManagement = driverCWS.getDriverManagementSOAP();
         BindingProvider provider = (BindingProvider) driverManagement;
         provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "https://webservices-xc.wexinc.com/EWSDriverProject/ProxyServices/DriverProxyv1");
-        /*CWSAuthorizationProfileManagement profileAuthorizationCWS=new CWSAuthorizationProfileManagement();
+        CWSAuthorizationProfileManagement profileAuthorizationCWS=new CWSAuthorizationProfileManagement();
         AuthorizationProfileManagement profileManagement=profileAuthorizationCWS.getAuthorizationProfileManagementSOAP();
         CWSVehicleCardManagement vehicleCWS=new CWSVehicleCardManagement();
-        VehicleCardManagement vehicleManagement=vehicleCWS.getVehicleCardManagementSOAP();*/
+        VehicleCardManagement vehicleManagement=vehicleCWS.getVehicleCardManagementSOAP();
        
         org.apache.cxf.endpoint.Client driverclient = ClientProxy.getClient(driverManagement);
         
